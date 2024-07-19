@@ -8,8 +8,8 @@
 #include <unordered_set>
 #include <stdexcept>
 
-using Job = std::tuple<std::string, int, std::string>;
-using JobGraph = std::unordered_map<std::string, std::pair<int, std::string>>;
+using Job = std::tuple<int, int, int>;
+using JobGraph = std::unordered_map<int, std::pair<int, int>>;
 
 std::vector<Job> readCSV(const std::string& filename) {
     std::vector<Job> jobs;
@@ -17,34 +17,35 @@ std::vector<Job> readCSV(const std::string& filename) {
     std::string line;
     while (std::getline(file, line)) {
         std::istringstream ss(line);
-        std::string start_job, time_str, next_job;
-        if (std::getline(ss, start_job, ',') &&
+        std::string id_str, time_str, next_id_str;
+        if (std::getline(ss, id_str, ',') &&
             std::getline(ss, time_str, ',') &&
-            std::getline(ss, next_job, ',')) {
+            std::getline(ss, next_id_str, ',')) {
+            int id = std::stoi(id_str);
             int time = std::stoi(time_str);
-            jobs.emplace_back(start_job, time, next_job);
+            int next_id = std::stoi(next_id_str);
+            jobs.emplace_back(id, time, next_id);
         }
     }
     return jobs;
 }
 
 bool isUnionOfSingleLinkedLists(const std::vector<Job>& jobs, JobGraph& jobGraph) {
-    std::unordered_set<std::string> seenStartJobs;
-    std::unordered_set<std::string> seenNextJobs;
+    std::unordered_set<int> seenStartJobs;
+    std::unordered_set<int> seenNextJobs;
     
     for (const auto& job : jobs) {
-        std::string start_job, next_job;
-        int time;
-        std::tie(start_job, time, next_job) = job;
+        int id, time, next_id;
+        std::tie(id, time, next_id) = job;
 
-        if (seenStartJobs.find(start_job) != seenStartJobs.end()) {
+        if (seenStartJobs.find(id) != seenStartJobs.end()) {
             return false;  // Duplicate start job
         }
-        seenStartJobs.insert(start_job);
-        if (!next_job.empty()) {
-            seenNextJobs.insert(next_job);
+        seenStartJobs.insert(id);
+        if (next_id != 0) {
+            seenNextJobs.insert(next_id);
         }
-        jobGraph[start_job] = {time, next_job};
+        jobGraph[id] = {time, next_id};
     }
 
     // Ensure no job appears as both start_job and next_job except for endpoint jobs
@@ -59,12 +60,12 @@ bool isUnionOfSingleLinkedLists(const std::vector<Job>& jobs, JobGraph& jobGraph
 void computeJobStatistics(const JobGraph& jobGraph, int& totalTime, int& totalJobs, double& averageTime) {
     totalTime = 0;
     totalJobs = 0;
-    std::unordered_set<std::string> visited;
+    std::unordered_set<int> visited;
     
-    for (const auto& [start_job, _] : jobGraph) {
-        if (visited.find(start_job) == visited.end()) {
-            std::string current_job = start_job;
-            while (!current_job.empty() && visited.find(current_job) == visited.end()) {
+    for (const auto& [id, _] : jobGraph) {
+        if (visited.find(id) == visited.end()) {
+            int current_job = id;
+            while (current_job != 0 && visited.find(current_job) == visited.end()) {
                 visited.insert(current_job);
                 totalTime += jobGraph.at(current_job).first;
                 totalJobs++;
@@ -77,7 +78,7 @@ void computeJobStatistics(const JobGraph& jobGraph, int& totalTime, int& totalJo
 
 int main() {
     try {
-        const std::string filename = "test_jobs.csv";
+        const std::string filename = "daily_log.csv";
         auto jobs = readCSV(filename);
 
         JobGraph jobGraph;
