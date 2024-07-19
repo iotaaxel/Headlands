@@ -23,8 +23,6 @@ number_of_jobs: number of jobs in the chain
 job_chain_runtime: total runtime of the chain (in HH:MM:SS)
 average_job_time: average per job runtime (in HH:MM:SS)
 ```
-## Important Note
-The code and test case were modified for a slightly different scenario and input.
 
 ## Build and Run:
 1. Create a `build` directory: 
