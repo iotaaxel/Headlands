@@ -36,11 +36,18 @@ average_job_time: average per job runtime (in HH:MM:SS)
 
 ## Performance and Complexity 
 ### Reading and Parsing CSV File:
-* Time Complexity: `O(n)`, where n is the number of lines in the CSV file.
-* Space Complexity: `O(n)` for storing the jobs in memory.
+* Time Complexity: `O(n)`, where n is the number of lines in the CSV file. Each line is processed once to extract the job details.
+* Space Complexity: `O(n)` where n is the number of lines in the CSV file. This is for storing the jobs in memory.
+* Efficiency Considerations: The parsing is done in a single pass, making it efficient in terms of both time and space.
 ### Detecting Union of Single Linked Lists:
-* Time Complexity: `O(n)` for iterating over the jobs to verify conditions.
-* Space Complexity: `O(n)` for storing the job graph and auxiliary sets (seenStartJobs and seenNextJobs).
+* Time Complexity: `O(n)`, where n is the number of jobs. We iterate over the list of jobs to build the graph and check for duplicates.
+* Space Complexity: `O(n)`, where n is the number of jobs. We use two sets (seenStartJobs and seenNextJobs) to keep track of the jobs, and a map (jobGraph) to store the job details.
+* Efficiency Considerations: Using sets provides average O(1) time complexity for insertions and lookups, making this step efficient.
 ### Computing Job Statistics:
-* Time Complexity: `O(n)` for traversing the job graph.
-* Space Complexity: `O(n)` for storing visited jobs.
+* Time Complexity: `O(n)`, where n is the number of jobs. We traverse the job graph once to compute the total time, number of jobs, and average time.
+* Space Complexity: `O(n)`, where n is the number of jobs. We use a set (visited) to keep track of the visited jobs.
+* Efficiency Considerations: The single traversal of the job graph ensures that the computation is efficient.
+### Summary
+* The overall time complexity for the complete process is `O(n)`, dominated by the need to process each job and its details.
+* The overall space complexity is `O(n)`, as we need to store the job details, sets for tracking job IDs, and the job graph.
+
