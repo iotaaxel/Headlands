@@ -1,9 +1,7 @@
 # Headlands
 
 ## Scenario - Job Runner
-In C++20, given a csv file, each row being start_job, time, next_job, Your job is to detect if the input data is an union of single linked list; then compute the total time to finish all jobs, the total number of jobs, average time per job. Read the csv file, run an algorithm, writing output. 
-
-Each day a distributed computing platform generates a daily log of job runs. Each job has a unique integer id, the time it took to run (in seconds), and the next job's id. We call a sequence of jobs a chain; if a job represents the end of the chain, its next id will be `0`. Given the daily log generate a report summarizing the chains run during the day If the input is malformed in any way then an error should be reported.
+Each day a distributed computing platform generates a daily log of job runs. Each job has a unique integer id, the time it took to run (in seconds), and the next job's id. We call a sequence of jobs a chain; if a job represents the end of the chain, its next id will be `0`. Given the daily log (from a csv file), generate a report summarizing the chains run during the day. Your job is to detect if the input data is an union of single linked list; then compute the total time to finish all jobs, the total number of jobs, average time per job. If the input is malformed in any way then an error should be reported.
 
 ### Input (CSV format via STDIN)
 * The first line is a header.
